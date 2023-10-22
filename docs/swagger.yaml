@@ -1,0 +1,10 @@
+host: localhost:8080
+info:
+  contact:
+    email: is.demchuk@gmail.com
+    name: Ivan Demchuk
+  description: Swagger documentation fo Backend Trainee Assignment 2023 service
+  title: Backend Trainee Assignment 2023
+  version: "1.0"
+paths: {}
+swagger: "2.0"

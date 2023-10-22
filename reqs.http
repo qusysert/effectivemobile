@@ -1,0 +1,29 @@
+
+###
+POST localhost:8080/addUser
+accept: application/json
+Content-Type: application/json
+
+{
+  "name": "erwrf",
+  "surname": "Ushakov"
+}
+
+###
+DELETE localhost:8080/deleteUser?id=1
+
+###
+POST localhost:8080/updateUser
+accept: application/json
+Content-Type: application/json
+
+{
+  "id": 6,
+  "name": "Tyrone",
+  "surname": "Ushakov"
+}
+
+
+
+
+

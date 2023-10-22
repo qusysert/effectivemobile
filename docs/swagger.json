@@ -1,0 +1,14 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Swagger documentation fo Backend Trainee Assignment 2023 service",
+        "title": "Backend Trainee Assignment 2023",
+        "contact": {
+            "name": "Ivan Demchuk",
+            "email": "is.demchuk@gmail.com"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "paths": {}
+}
