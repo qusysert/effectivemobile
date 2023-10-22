@@ -1,3 +1,70 @@
+definitions:
+  handler.AddUserRequest:
+    properties:
+      name:
+        example: Peter
+        type: string
+      patronymic:
+        example: Ivanovich
+        type: string
+      surname:
+        example: Dibin
+        type: string
+    type: object
+  handler.AddUserResponse:
+    properties:
+      user:
+        example: 1
+        type: integer
+    type: object
+  handler.GetUserResponse:
+    properties:
+      users:
+        items:
+          $ref: '#/definitions/model.UserInfo'
+        type: array
+    type: object
+  handler.UpdateUserRequest:
+    properties:
+      id:
+        example: 2
+        type: integer
+      name:
+        example: Bill
+        type: string
+      patronymic:
+        example: ""
+        type: string
+      surname:
+        example: McDonald Jr.
+        type: string
+    type: object
+  handler.emptyResponse:
+    type: object
+  model.UserInfo:
+    properties:
+      age:
+        example: 68
+        type: integer
+      gender:
+        example: male
+        type: string
+      id:
+        example: 1
+        type: integer
+      name:
+        example: Peter
+        type: string
+      nation:
+        example: RU
+        type: string
+      patronymic:
+        example: ""
+        type: string
+      surname:
+        example: Ivanovich
+        type: string
+    type: object
 host: localhost:8080
 info:
   contact:
@@ -6,5 +73,115 @@ info:
   description: Swagger documentation fo Backend Trainee Assignment 2023 service
   title: Backend Trainee Assignment 2023
   version: "1.0"
-paths: {}
+paths:
+  /addUser:
+    post:
+      consumes:
+      - application/json
+      description: add new user with name, surname and patronymic
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.AddUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.AddUserResponse'
+      summary: Add user
+      tags:
+      - user
+  /deleteUser:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user by ID
+      parameters:
+      - description: User ID
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.emptyResponse'
+      summary: Delete user
+      tags:
+      - user
+  /getUser:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of users based on the provided filters and pagination
+        options
+      parameters:
+      - description: Name contains
+        in: query
+        name: name_like
+        type: string
+      - description: Minimum age
+        in: query
+        name: age_from
+        type: integer
+      - description: Maximum age
+        in: query
+        name: age_to
+        type: integer
+      - description: Gender
+        in: query
+        name: gender
+        type: string
+      - description: Nation
+        in: query
+        name: nation
+        type: string
+      - description: Page size
+        in: query
+        name: page_size
+        type: integer
+      - description: Page number
+        in: query
+        name: page_num
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.GetUserResponse'
+      summary: Get users
+      tags:
+      - user
+  /updateUser:
+    post:
+      consumes:
+      - application/json
+      description: update user by passing new values
+      parameters:
+      - description: query params
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handler.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.emptyResponse'
+      summary: Update user
+      tags:
+      - user
 swagger: "2.0"

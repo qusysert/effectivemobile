@@ -127,6 +127,8 @@ func sendErrorResponse(w http.ResponseWriter, respErr error, respCode int) {
 }
 
 type emptyRequest struct{}
+
+// emptyResponse example
 type emptyResponse struct{}
 type errorResponse struct {
 	Error string `json:"error"`
