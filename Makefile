@@ -13,4 +13,7 @@ gen-swagger:
 	GOBIN=$(LOCAL_BIN) go install github.com/swaggo/swag/cmd/swag
 	$(LOCAL_BIN)/swag init -g ./cmd/effectivemobile/main.go
 
+docker-up:
+	docker-compose up --build
+
 
