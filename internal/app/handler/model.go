@@ -21,6 +21,7 @@ func toModelUser(user interface{}) model.UserInfo {
 		}
 	case UpdateUserRequest:
 		return model.UserInfo{
+			Id:         u.Id,
 			Name:       u.Name,
 			Surname:    u.Surname,
 			Patronymic: u.Patronymic,
@@ -39,5 +40,17 @@ func fromModelUser(userInfo model.UserInfo) User {
 		Age:        userInfo.Age,
 		Gender:     userInfo.Gender,
 		Nation:     userInfo.Nation,
+	}
+}
+
+func toUserFilter(req GetUserRequest) model.UserFilter {
+	return model.UserFilter{
+		NameLike: req.NameLike,
+		AgeFrom:  req.AgeFrom,
+		AgeTo:    req.AgeTo,
+		Gender:   req.Gender,
+		Nation:   req.Nation,
+		PageSize: req.PageSize,
+		PageNum:  req.PageNum,
 	}
 }

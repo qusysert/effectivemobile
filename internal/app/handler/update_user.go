@@ -13,7 +13,7 @@ type UpdateUserRequest struct {
 }
 
 func (h Handler) UpdateUserHandler(ctx context.Context, req UpdateUserRequest) (*emptyResponse, error) {
-	err := h.service.UpdateUser(ctx, req.Id, toModelUser(req))
+	err := h.service.UpdateUser(ctx, toModelUser(req))
 	if err != nil {
 		return nil, fmt.Errorf("cannot add segment: %w", err)
 	}

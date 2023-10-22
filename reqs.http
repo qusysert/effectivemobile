@@ -5,7 +5,7 @@ accept: application/json
 Content-Type: application/json
 
 {
-  "name": "erwrf",
+  "name": "Lena",
   "surname": "Ushakov"
 }
 
@@ -18,10 +18,14 @@ accept: application/json
 Content-Type: application/json
 
 {
-  "id": 6,
+  "id": 1,
   "name": "Tyrone",
   "surname": "Ushakov"
 }
+
+###
+GET localhost:8080/getUser?name_like=Len&page_size=2&page_num=2
+
 
 
 

@@ -21,7 +21,8 @@ import (
 type IService interface {
 	AddUser(ctx context.Context, user model.UserInfo) (int, error)
 	DeleteUser(ctx context.Context, id int) error
-	UpdateUser(ctx context.Context, id int, info model.UserInfo) error
+	UpdateUser(ctx context.Context, info model.UserInfo) error
+	GetUser(ctx context.Context, filter model.UserFilter) ([]model.UserInfo, error)
 }
 
 type Handler struct {
@@ -46,6 +47,7 @@ func (h Handler) RegisterHandlers(router *mux.Router, mw ...func(next http.Handl
 		{route: "/addUser", handler: handle(h.AddUserHandler)},
 		{route: "/deleteUser", handler: handle(h.DeleteUserHandler)},
 		{route: "/updateUser", handler: handle(h.UpdateUserHandler)},
+		{route: "/getUser", handler: handle(h.GetUserHandler)},
 	} {
 		router.HandleFunc(rec.route, middlewareChain(rec.handler, mw...))
 	}

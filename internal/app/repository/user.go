@@ -5,6 +5,7 @@ import (
 	"effectivemobile/internal/app/model"
 	db "effectivemobile/pkg/gopkg-db"
 	"fmt"
+	"strconv"
 )
 
 func (r *Repository) DeleteUser(ctx context.Context, id int) error {
@@ -37,10 +38,10 @@ func (r *Repository) AddUser(ctx context.Context, info model.UserInfo) (int, err
 	return id, nil
 }
 
-func (r *Repository) UpdateUser(ctx context.Context, id int, info model.UserInfo) error {
+func (r *Repository) UpdateUser(ctx context.Context, info model.UserInfo) error {
 	result, err := db.FromContext(ctx).Exec(ctx,
 		`UPDATE public.user SET name = $1, surname = $2, patronymic=$3, age=$4, gender=$5, nation=$6 WHERE id=$7`,
-		info.Name, info.Surname, info.Patronymic, info.Age, info.Gender, info.Nation, id)
+		info.Name, info.Surname, info.Patronymic, info.Age, info.Gender, info.Nation, info.Id)
 	if err != nil {
 		return fmt.Errorf("failed to update: %w", err)
 	}
@@ -48,8 +49,71 @@ func (r *Repository) UpdateUser(ctx context.Context, id int, info model.UserInfo
 	rowsAffected := result.RowsAffected()
 
 	if rowsAffected == 0 {
-		return fmt.Errorf("user with id %d does not exist", id)
+		return fmt.Errorf("user with id %d does not exist", info.Id)
 	}
 
 	return nil
+}
+
+func (r *Repository) GetUser(ctx context.Context, filters model.UserFilter) ([]model.UserInfo, error) {
+	query := `SELECT id, name, surname, patronymic, age, gender, nation FROM "user" WHERE 1=1`
+	args := []interface{}{}
+	argIndex := 1
+
+	if filters.NameLike != "" {
+		query += " AND full_name LIKE $" + strconv.Itoa(argIndex)
+		args = append(args, "%"+filters.NameLike+"%")
+		argIndex++
+	}
+
+	if filters.AgeFrom > 0 {
+		query += " AND age >= $" + strconv.Itoa(argIndex)
+		args = append(args, filters.AgeFrom)
+		argIndex++
+	}
+
+	if filters.AgeTo > 0 {
+		query += " AND age <= $" + strconv.Itoa(argIndex)
+		args = append(args, filters.AgeTo)
+		argIndex++
+	}
+
+	if filters.Gender != "" {
+		query += " AND gender = $" + strconv.Itoa(argIndex)
+		args = append(args, filters.Gender)
+		argIndex++
+	}
+
+	if filters.Nation != "" {
+		query += " AND nation = $" + strconv.Itoa(argIndex)
+		args = append(args, filters.Nation)
+		argIndex++
+	}
+
+	if filters.PageSize > 0 && filters.PageNum > 0 {
+		offset := (filters.PageNum - 1) * filters.PageSize
+		query += " LIMIT " + strconv.Itoa(filters.PageSize) + " OFFSET " + strconv.Itoa(offset)
+	}
+
+	rows, err := db.FromContext(ctx).Query(ctx, query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %w", err)
+	}
+	defer rows.Close()
+
+	var users []model.UserInfo
+	for rows.Next() {
+		var user model.UserInfo
+		err := rows.Scan(&user.Id, &user.Name, &user.Surname, &user.Patronymic, &user.Age, &user.Gender, &user.Nation)
+		if err != nil {
+			return nil, fmt.Errorf("failed to scan row: %w", err)
+		}
+		users = append(users, user)
+	}
+
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating over rows: %w", err)
+	}
+
+	return users, nil
 }

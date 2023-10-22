@@ -9,7 +9,8 @@ import (
 type IRepository interface {
 	DeleteUser(ctx context.Context, id int) error
 	AddUser(ctx context.Context, info model.UserInfo) (int, error)
-	UpdateUser(ctx context.Context, id int, info model.UserInfo) error
+	UpdateUser(ctx context.Context, info model.UserInfo) error
+	GetUser(ctx context.Context, filters model.UserFilter) ([]model.UserInfo, error)
 }
 
 type IEnrichService interface {
