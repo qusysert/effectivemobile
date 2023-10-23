@@ -39,6 +39,9 @@ func (r *Repository) AddUser(ctx context.Context, info model.UserInfo) (int, err
 }
 
 func (r *Repository) UpdateUser(ctx context.Context, info model.UserInfo) error {
+	if info.Id == 0 {
+		return fmt.Errorf("cant update user: no user id")
+	}
 	result, err := db.FromContext(ctx).Exec(ctx,
 		`UPDATE public.user SET name = $1, surname = $2, patronymic=$3, age=$4, gender=$5, nation=$6 WHERE id=$7`,
 		info.Name, info.Surname, info.Patronymic, info.Age, info.Gender, info.Nation, info.Id)
@@ -87,6 +90,12 @@ func (r *Repository) GetUser(ctx context.Context, filters model.UserFilter) ([]m
 	if filters.Nation != "" {
 		query += " AND nation = $" + strconv.Itoa(argIndex)
 		args = append(args, filters.Nation)
+		argIndex++
+	}
+
+	if filters.Id != 0 {
+		query += " AND id = $" + strconv.Itoa(argIndex)
+		args = append(args, filters.Id)
 		argIndex++
 	}
 

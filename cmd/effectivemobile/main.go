@@ -39,11 +39,11 @@ func main() {
 		log.Fatal(fmt.Errorf("cant create connection to db: %v", err))
 	}
 
-	repo := repository.New(cfg)
+	repo := repository.New()
 
-	enrichClienr := enrichclient.New(cfg.AgifyHost, cfg.GenderizeHost, cfg.NationalizeHost)
+	enrichClient := enrichclient.New(cfg.AgifyHost, cfg.GenderizeHost, cfg.NationalizeHost)
 
-	srv := service.New(cfg, repo, enrichClienr)
+	srv := service.New(cfg, repo, enrichClient)
 	hdl := handler.New(srv)
 
 	corsMw := cors.New(cors.Options{

@@ -8,6 +8,7 @@ import (
 
 // GetUserRequest example
 type GetUserRequest struct {
+	Id       int    `query:"id" json:"id" example:"1"`
 	NameLike string `query:"name_like" json:"name_like" example:"Pet"`
 	AgeFrom  int    `query:"age_from" json:"age_from" example:"30"`
 	AgeTo    int    `query:"age_to" json:"age_to" example:"90"`

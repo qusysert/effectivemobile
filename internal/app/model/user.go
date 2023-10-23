@@ -11,6 +11,7 @@ type UserInfo struct {
 }
 
 type UserFilter struct {
+	Id       int    `json:"id"`
 	NameLike string `json:"name_like"`
 	AgeFrom  int    `json:"age_from"`
 	AgeTo    int    `json:"age_to"`
