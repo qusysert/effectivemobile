@@ -4,25 +4,22 @@ import (
 	"effectivemobile/internal/app/model"
 	"math/rand"
 	"testing"
-	"time"
 )
-
-const randomStringLength = 4
-const testUsersAmount = 4
 
 func TestApp(t *testing.T) {
 	env, rollback := NewEnv()
 	defer rollback()
 
-	users := make([]model.UserInfo, 0)
+	rand.Seed(0)
 
-	for i := 0; i < testUsersAmount; i++ {
-		user := model.UserInfo{
-			Name:       getRandomName(),
-			Surname:    genString(),
-			Patronymic: genString(),
-		}
-		users = append(users, user)
+	users := []model.UserInfo{
+		{Name: "John", Surname: "Doe", Patronymic: "Smith"},
+		{Name: "Emma", Surname: "Johnson", Patronymic: "Brown"},
+		{Name: "Michael", Surname: "Williams", Patronymic: "Davis"},
+		{Name: "Olivia", Surname: "Taylor", Patronymic: "Anderson"},
+	}
+
+	for _, user := range users {
 		_, err := env.Srv.AddUser(env.Ctx, user)
 		if err != nil {
 			t.Errorf("cannot add user: %v", err)
@@ -70,17 +67,6 @@ func TestApp(t *testing.T) {
 	if len(paginationFeed) != 2 {
 		t.Errorf("error getting paginated feed: wrong length")
 	}
-
-}
-
-func genString() string {
-	chars := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	name := make([]byte, randomStringLength)
-	for i := range name {
-		name[i] = chars[rand.Intn(len(chars))]
-	}
-
-	return "test_" + string(name)
 }
 
 func getRandomName() string {
@@ -91,8 +77,6 @@ func getRandomName() string {
 		"Amelia", "Daniel", "Harper", "Matthew", "Evelyn",
 	}
 
-	rand.Seed(time.Now().UnixNano())
 	randomIndex := rand.Intn(len(names))
-
 	return names[randomIndex]
 }
