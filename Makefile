@@ -16,4 +16,10 @@ gen-swagger:
 docker-up:
 	docker-compose up --build
 
+gen-mock:
+	GOBIN=$(LOCAL_BIN) go get github.com/vektra/mockery/v2
+	GOBIN=$(LOCAL_BIN) go install github.com/vektra/mockery/v2
+	$(LOCAL_BIN)/mockery --all
 
+test:
+	go test ./...
