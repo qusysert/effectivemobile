@@ -27,6 +27,9 @@ Content-Type: application/json
 GET localhost:8080/getUser?name_like=Len&page_size=2&page_num=2
 
 ###
+GET localhost:8080/getUser?name_like=Len&page_size=0&page_num=2
+
+###
 GET localhost:8080/getUser
 
 

@@ -63,6 +63,10 @@ func (r *Repository) GetUser(ctx context.Context, filters model.UserFilter) ([]m
 	args := []interface{}{}
 	argIndex := 1
 
+	if !((filters.PageSize == 0 && filters.PageNum == 0) || (filters.PageSize != 0 && filters.PageNum != 0)) {
+		return nil, fmt.Errorf("wrong pagination options")
+	}
+
 	if filters.NameLike != "" {
 		query += " AND full_name LIKE $" + strconv.Itoa(argIndex)
 		args = append(args, "%"+filters.NameLike+"%")

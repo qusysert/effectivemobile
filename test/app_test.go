@@ -3,6 +3,7 @@ package test
 import (
 	"effectivemobile/internal/app/model"
 	"math/rand"
+	"strings"
 	"testing"
 )
 
@@ -66,6 +67,11 @@ func TestApp(t *testing.T) {
 	}
 	if len(paginationFeed) != 2 {
 		t.Errorf("error getting paginated feed: wrong length")
+	}
+
+	_, err = env.Srv.GetUser(env.Ctx, model.UserFilter{PageSize: 0, PageNum: 2})
+	if err == nil && !strings.Contains(err.Error(), "error getting user: wrong pagination options") {
+		t.Errorf("error getting user: wrong pagination options worked")
 	}
 }
 
