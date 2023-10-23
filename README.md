@@ -22,7 +22,7 @@ Swagger документация доступна по адресу http://local
 
 ## Информация
 - Фильтры и настройки пагинации:
-```json
+```
   Id       int    `query:"id" json:"id" example:"1"`
   NameLike string `query:"name_like" json:"name_like" example:"Pet"`
   AgeFrom  int    `query:"age_from" json:"age_from" example:"30"`
@@ -41,5 +41,7 @@ Swagger документация доступна по адресу http://local
 
 ## База данных
 В качестве БД был выбран PostgreSQL
+
 Сама БД состоит из таблицы user
+
 ![db_scheme.png](docs/db_scheme.png)
