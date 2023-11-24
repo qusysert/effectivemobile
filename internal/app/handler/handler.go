@@ -30,7 +30,6 @@ type Handler struct {
 }
 
 func New(srv IService) *Handler {
-
 	return &Handler{service: srv}
 }
 
@@ -57,7 +56,6 @@ var validate = validator.New()
 
 func handle[REQ any, RESP any](fn func(ctx context.Context, req REQ) (*RESP, error)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-
 		headers := w.Header()
 		headers.Set("Access-Control-Allow-Origin", "*")
 		headers.Set("Access-Control-Allow-Methods", "POST")
@@ -126,16 +124,14 @@ func sendErrorResponse(w http.ResponseWriter, respErr error, respCode int) {
 	log.Println(respErr)
 }
 
-type emptyRequest struct{}
-
 // emptyResponse example
 type emptyResponse struct{}
 type errorResponse struct {
 	Error string `json:"error"`
 }
+type emptyRequest struct{}
 
 func parsePathParams[REQ any](r *http.Request, req *REQ) error {
-
 	setField := func(field reflect.StructField, val reflect.Value, value string) error {
 		switch field.Type.Kind() {
 		case reflect.String:
@@ -152,7 +148,6 @@ func parsePathParams[REQ any](r *http.Request, req *REQ) error {
 			return fmt.Errorf("Unsupported path value type %v\n", field.Type.Kind())
 		}
 	}
-
 	pathParams := mux.Vars(r)
 	queryParams := r.URL.Query()
 	val := reflect.ValueOf(req).Elem()
